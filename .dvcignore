@@ -1,0 +1,4 @@
+# DVC ignores these paths when computing hashes
+__pycache__/
+.ipynb_checkpoints/
+*.pyc

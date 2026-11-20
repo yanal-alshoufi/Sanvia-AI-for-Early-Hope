@@ -1,0 +1,17 @@
+# Core (Colab already provides compatible torch/torchvision; pin if you need exact reproduction)
+torch>=2.1
+torchvision>=0.16
+numpy>=1.26
+pandas>=2.0
+scikit-learn>=1.3
+pillow>=10.0
+matplotlib>=3.7
+seaborn>=0.13
+pyyaml>=6.0
+# MLOps
+mlflow>=2.14
+dvc>=3.0
+# Dev / CI
+pytest>=7.4
+ruff>=0.4
+nbformat>=5.9

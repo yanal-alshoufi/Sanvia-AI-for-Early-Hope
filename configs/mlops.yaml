@@ -1,0 +1,23 @@
+mlops:
+  dataset_release_id: "VinDr-Mammo-v1.0.0"
+  mlflow:
+    experiment_name: SANVIA_Stage1_Backbone_Benchmark
+    db_relpath: mlops/mlflow/mlflow.db
+    artifacts_relpath: mlops/mlflow/artifacts
+  dvc:
+    enabled: true
+    track_full_images: false     # must remain false in Stage 1
+    track_csv_files: true
+    track_manifests: true
+    image_checksum_algorithm: sha256
+    verify_image_checksums: true
+    remote_name: sanvia_storage
+    remote_relpath: mlops/dvc_remote   # relative to output_dir (persistent Google Drive)
+    tracked_dir: data/tracked          # inside the Git repository, small files only
+  git:
+    capture: true
+    fail_on_dirty: false
+  registry:
+    register: true
+    model_name_prefix: SANVIA_Stage1
+    alias: research_candidate

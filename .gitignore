@@ -1,0 +1,43 @@
+# Medical images and datasets (never commit)
+*.png
+*.jpg
+*.jpeg
+*.dcm
+*.dicom
+VnDir_Mammo/
+images/
+data/tracked/*.csv
+data/tracked/*.json
+data/prepared/
+
+# Checkpoints, experiment artifacts and MLflow
+*.pt
+*.pth
+*.ckpt
+outputs/
+sanvia_outputs/
+mlruns/
+mlflow.db
+*.db
+mlartifacts/
+
+# DVC machine-specific settings and cache
+.dvc/config.local
+.dvc/cache/
+.dvc/tmp/
+
+# Environments, secrets and temporary files
+.env
+.venv/
+venv/
+*.pem
+*.key
+credentials*.json
+client_secret*.json
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.tmp
+.DS_Store

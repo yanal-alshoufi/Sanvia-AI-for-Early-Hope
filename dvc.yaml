@@ -1,0 +1,19 @@
+# Only small, deterministic data-preparation artifacts are DVC-managed.
+# PNG images are NOT tracked (no full-image DVC tracking in Stage 1): they are verified through
+# the SHA-256 manifest (png_image_manifest.csv) instead.
+# The three source CSVs are tracked with `dvc add` as data/tracked/*.csv (see notebook section 4).
+stages:
+  prepare_data:
+    cmd: python scripts/prepare_data.py --config-dir configs
+    deps:
+      - scripts/prepare_data.py
+      - src/sanvia/data
+      - configs/data.yaml
+      - data/tracked/breast-level_annotations.csv.dvc
+    params:
+      - configs/data.yaml:
+          - data.split
+          - data.labels
+          - data.sample_construction
+    # Outputs live on Google Drive (sanvia_outputs/) and are tracked by copying the small
+    # manifests into data/tracked via DVCManager.stage_files, so no outs are declared here.

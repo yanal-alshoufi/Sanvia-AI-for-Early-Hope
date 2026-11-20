@@ -1,0 +1,8 @@
+project:
+  name: SANVIA
+  stage: stage1_backbone_benchmark
+  version: "1.0.0"
+  seed: 42
+
+logging:
+  level: INFO

@@ -1,0 +1,111 @@
+data:
+  # Primary VinDr-Mammo PNG copy on Google Drive. Paths below the data_dir are relative.
+  paths:
+    data_dir: /content/drive/MyDrive/VnDir_Mammo
+    images_dir: images/images_png
+    metadata_csv: metadata.csv
+    breast_annotations_csv: breast-level_annotations.csv
+    finding_annotations_csv: finding_annotations.csv
+    output_dir: sanvia_outputs
+
+  # Column names are validated against the real CSV headers before use.
+  columns:
+    study_id: study_id
+    series_id: series_id
+    image_id: image_id
+    laterality: laterality
+    view_position: view_position
+    birads: breast_birads
+    density: breast_density
+    split: split
+
+  # Official test data is never loaded into any DataLoader in Stage 1.
+  evaluate_official_test: false
+
+  indexing:
+    extension: ".png"
+    hash_workers: 8
+    reuse_previous_manifest_hashes: true   # reuse only if size and mtime match; verify_png_manifest always recomputes
+
+  audit:
+    stats_sample_size: 1000     # images decoded for pixel statistics (null = all images)
+    workers: 8
+    percentiles: [0.1, 1, 50, 99, 99.9]
+    pixel_stride: 4
+    max_excluded_sample_fraction: 0.05   # gate: stop if more breasts than this are excluded
+
+  sample_construction:
+    laterality_values: [L, R]
+    view_values:
+      cc: CC
+      mlo: MLO
+    allow_unknown_labels: false
+
+  # Exact string matching only (case-insensitive, whitespace-stripped). No regex extraction.
+  labels:
+    birads_map:
+      "BI-RADS 1": 0
+      "BI-RADS 2": 1
+      "BI-RADS 3": 2
+      "BI-RADS 4": 3
+      "BI-RADS 5": 4
+    density_map:
+      "DENSITY A": 0
+      "DENSITY B": 1
+      "DENSITY C": 2
+      "DENSITY D": 3
+      "A": 0
+      "B": 1
+      "C": 2
+      "D": 3
+
+  split:
+    official_train_value: training
+    official_test_value: test
+    val_fraction: 0.20
+    seed: 42
+    stratify: true
+    min_stratum_size: 4
+
+  age:
+    mode: auto                       # auto | enabled | disabled
+    metadata_age_column: "Patient's Age"
+    metadata_id_candidates: ["SOP Instance UID", "image_id"]
+    min_match_rate: 0.99
+    valid_range: [15, 110]
+    imputation: median               # fitted on Train only
+    scaling: standard                # fitted on Train only
+
+  normalization:
+    strategy: dtype_range            # dtype_range | global_window
+    allowed_bit_depths: [8, 16]
+    ambiguous_16bit_max_threshold: 32768   # 16-bit files whose global max is below this stop the pipeline
+    global_window:
+      lower_percentile: 0.5
+      upper_percentile: 99.5
+      n_images: 400
+      estimated_from: train
+
+  preprocessing:
+    imagenet_mean: [0.485, 0.456, 0.406]
+    imagenet_std: [0.229, 0.224, 0.225]
+    letterbox: true
+    pad_value: 0.0
+    interpolation: bilinear
+    antialias: true
+
+  augmentation:
+    enabled: true
+    share_params_across_views: false  # CC and MLO are different projections: sample geometry independently
+    rotation_degrees: 5.0
+    translate_fraction: 0.03
+    scale_range: [0.95, 1.05]
+    brightness_range: [0.92, 1.08]     # multiplicative, background stays black
+    contrast_range: [0.92, 1.08]
+    gamma_range: [0.92, 1.08]
+    gaussian_noise_std: 0.01
+    p_geometric: 0.7
+    p_photometric: 0.5
+    p_noise: 0.2
+    horizontal_flip: false
+    vertical_flip: false

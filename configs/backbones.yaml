@@ -1,0 +1,7 @@
+backbones:
+  - {name: ResNet50,          builder: resnet50,           weights_enum: ResNet50_Weights,           weights_name: IMAGENET1K_V2, input_size: 224, feature_dim: 2048, approx_params_m: 25.6}
+  - {name: DenseNet121,       builder: densenet121,        weights_enum: DenseNet121_Weights,        weights_name: IMAGENET1K_V1, input_size: 224, feature_dim: 1024, approx_params_m: 8.0}
+  - {name: InceptionV3,       builder: inception_v3,       weights_enum: Inception_V3_Weights,       weights_name: IMAGENET1K_V1, input_size: 299, feature_dim: 2048, approx_params_m: 27.2}
+  - {name: MobileNetV3-Large, builder: mobilenet_v3_large, weights_enum: MobileNet_V3_Large_Weights, weights_name: IMAGENET1K_V2, input_size: 224, feature_dim: 960,  approx_params_m: 5.5}
+  - {name: EfficientNet-B4,   builder: efficientnet_b4,    weights_enum: EfficientNet_B4_Weights,    weights_name: IMAGENET1K_V1, input_size: 380, feature_dim: 1792, approx_params_m: 19.3}
+  - {name: EfficientNetV2-S,  builder: efficientnet_v2_s,  weights_enum: EfficientNet_V2_S_Weights,  weights_name: IMAGENET1K_V1, input_size: 384, feature_dim: 1280, approx_params_m: 21.5}
