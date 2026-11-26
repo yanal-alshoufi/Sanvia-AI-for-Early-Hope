@@ -4,11 +4,11 @@ Base commit `050eae24f2d4ee5be9d9f9f3f929e3fa672f6a3a` on `origin/master`. Devel
 
 | Milestone | Acceptance criteria | State |
 |---|---|---|
-| 1. Stage 1 contract and reproducibility | Run the previously excluded checksum test, explain the cause, retain historical fingerprint interpretation, load the actual selection, run configuration and original study assignments. Reject mixed snapshots and official-test access. | In progress |
-| 2. Sources and audit | Read documented source schemas, distinguish image types and grouping levels, retain raw labels, gate ambiguous records, persist deterministic patient splits and detect duplicates across sources and target. Verify missing/partial labels, DICOM polarity, resizing and corrupt files on fixtures. | Pending |
-| 3. Supervised source experiments | Encode valid views through the Stage 1 factory, route task heads, verify masked losses and frozen buffers, match per-source update budgets, verify both strategies and interrupted-run recovery. | Pending |
-| 4. Controlled target benchmark | Restore exact target architecture, transforms, losses and split. Transfer only verified backbone weights. Run and compare paired baselines for each seed, test validation-only metrics, selection and handoff reload. | Pending |
-| 5. Operations and delivery | Exercise CLI and notebook, separate modes and tracking, validate reports, run all existing and new tests, scan changes for secrets, document real-data acceptance. | Pending |
+| 1. Stage 1 contract and reproducibility | Run the previously excluded checksum test, explain the cause, retain historical fingerprint interpretation, load the actual selection, run configuration and original study assignments. Reject mixed snapshots and official-test access. | Implemented and fixture-tested. Private snapshot pending. |
+| 2. Sources and audit | Read documented source schemas, distinguish image types and grouping levels, retain raw labels, gate ambiguous records, persist deterministic patient splits and detect duplicates across sources and target. Verify missing/partial labels, DICOM polarity, resizing and corrupt files on fixtures. | Implemented and fixture-tested. Authorized release audits pending. |
+| 3. Supervised source experiments | Encode valid views through the Stage 1 factory, route task heads, verify masked losses and frozen buffers, match per-source update budgets, verify both strategies and interrupted-run recovery. | Implemented. Both strategies passed CPU interruption recovery. |
+| 4. Controlled target benchmark | Restore exact target architecture, transforms, losses and split. Transfer only verified backbone weights. Run and compare paired baselines for each seed, test validation-only metrics, selection and handoff reload. | Implemented. Six-arm smoke and portable reload passed. |
+| 5. Operations and delivery | Exercise CLI and notebook, separate modes and tracking, validate reports, run all existing and new tests, scan changes for secrets, document real-data acceptance. | CLI, tracking and DVC verified. Final notebook regression in progress. |
 
 ## Inspection and decisions
 
@@ -18,11 +18,11 @@ MLflow uses SQLite and a local artifact store. DVC tracks explicitly staged smal
 
 ## Outstanding inputs and issues
 
-No private Stage 1 output directory, licensed source collections, or VinDr PNG root accompanied the specification. Real counts, generalization results and a research handoff require those inputs. The historical notebook's Git authentication cells warrant owner review. Revoke any credential that was ever embedded, remove it from shared copies and use Colab Secrets or environment-based authentication. Do not copy credential-bearing cells into new notebooks.
+No private Stage 1 output directory, licensed source collections, or VinDr PNG root accompanied the specification. Real counts, generalization results and a research handoff require those inputs. The specification flags a possible credential in historical notebook copies. The checked-out notebook scan found no recognizable GitHub token. Revoke any credential that was ever embedded, remove it from shared copies and use Colab Secrets or environment-based authentication. Do not copy credential-bearing cells into new notebooks.
 
 ## Verification log
 
-Branch, base and source inventory verified. Pending checks are listed above.
+The results below distinguish software verification from the outstanding real-data acceptance run.
 
 ### Milestone 1 verification
 
@@ -47,3 +47,27 @@ Ran `pytest -q tests/stage2/test_source_training.py`. 3 passed. Both interrupted
 Stage 2 reuses the Stage 1 target model, augmentations, DataLoaders, two-phase Trainer and metric code. The evaluator can optionally include per-class probability columns. Its default output is unchanged. Source and baseline arms initialize target heads with the same seed and load only verified backbone tensors. Predefine per-task guardrails, validate sample alignment and resample whole studies. Export the pre-target artifact from the representative seed closest to its strategy mean.
 
 Ran `pytest -q tests/stage2/test_target.py`. 3 passed. Verified Stage 1 layout import, incompatible historical baseline provenance, factory reload, checksum rejection and paired study resampling. End-to-end target training and selection are checked in the final milestone.
+
+
+### Milestone 5 verification
+
+The packaged CLI smoke run used the actual torchvision MobileNetV3-Large and DenseNet121 factories at fixture resolution. It completed two synthetic baseline arms and four adaptations across three native-format synthetic sources. Each adapted arm exported and independently reloaded its pre-target feature weights. The six target runs produced probabilities, confusion matrices, paired comparison rows and mode-ineligible decisions. Official VinDr test usage was false.
+
+Ran `pytest -q tests/stage2/test_integration.py`. Three integration tests passed, including full workflow reuse, isolated linear probes, independent selection with ImageNet fallback, handoff loading, SQLite tracking readback and DVC hash-reference backup. The selection-policy fixture uses controlled scores exclusively for testing guards.
+
+The first Stage 1 suite run had 85 passes and one DVC failure. The environment mounted DVC's default /var/tmp cache read-only. Setting DVC_SITE_CACHE_DIR to writable private storage restored the DVC round-trip test. A follow-up run of the then-current Stage 2 suite plus tests/test_mlops.py passed all 14 checks. No tests were excluded from the final preflight.
+
+## Implementation inventory
+
+The isolated `src/sanvia/stage2/` package contains the Stage 1 reader, source adapters, audit, preprocessing, datasets, source model and training engine, controlled target training, comparison, export, tracking, preflight, synthetic fixture generator, orchestration and CLI. `configs/stage2/` holds the default protocol and task registries. The new notebook and tests use those same entry points. Packaging adds a CLI and optional source-format dependencies. Stage 1 changes are limited to restoring the manifest regression check, its null serialization and cache handling, and opt-in probability output in its evaluator.
+
+## Next real-data acceptance steps
+
+1. Mount the original private Stage 1 report, split, manifest, fitted preprocessing and checkpoint tree and the corresponding eligible VinDr PNGs. Run `sanvia-stage2 plan --config /private/stage2.yaml` to verify the selected pair, fingerprints and historical run records.
+2. Set source roots, authorized annotation paths and observed release versions. Run `sanvia-stage2 audit --config /private/stage2.yaml`. Review raw vocabularies, excluded cases, multi-lesion aggregation, grouping, conflicting split assignments, linked derivatives and duplicate candidates. Verify source schemas with the local releases. Configure optional BCDR subsets individually only after this review.
+3. Run a named pilot on the intended GPU. Verify compressed DICOM decoders, storage, memory, convergence, throughput, preemption and single-writer Drive tracking. Confirm permissions for any retained patient-level tables and plots.
+4. Freeze the protocol and run `sanvia-stage2 run-all --config /private/stage2.yaml` in full mode. Review all matched seeds, validation safeguards, source/target lineage, research registry readback and independent handoff reload. The published branch contains no actual clinical results or selected research weights.
+
+See [protocol, configurations, commands and handoff loading](stage2.md) for the Colab cells, complete private YAML template and output layout.
+
+The notebook's first synthetic execution completed all 26 code cells with zero cell errors, including its 99-test preflight. A local registry test exposed that MLflow 3.18 uses an exported PyTorch graph by default and requires an input example. Registration now provides a synthetic array at the recorded resolution. A second registration and alias readback succeeded with a real torchvision encoder. No private images entered this test. The final acceptance run also covers newly added release-binding and weighted gradient-accumulation checks.

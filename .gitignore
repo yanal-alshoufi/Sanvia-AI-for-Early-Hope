@@ -41,3 +41,9 @@ __pycache__/
 .ipynb_checkpoints/
 *.tmp
 .DS_Store
+
+# Stage 2 research exports and source formats
+*.tif
+*.tiff
+SANVIA_Stage2_Outputs/
+SANVIA_Datasets/

@@ -54,6 +54,7 @@ source_training:
   replay_fraction: 0.0
   batch_by_backbone: {}
 selection:
+  min_birads_fraction_of_best: 0.85
   min_gain: 0.005
   max_task_regression: 0.01
   max_qwk_regression: 0.05
@@ -64,3 +65,6 @@ selection:
 mlflow: true
 dvc: false
 
+preview_images: false   # Enable only for authorized private image reports.
+probe_epochs: 3
+minimum_free_gib: 0.25   # Configurable lower bound for output and cache filesystems.

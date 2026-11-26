@@ -23,7 +23,9 @@ def autocast_context(device: torch.device, amp: bool):
 
 
 @torch.no_grad()
-def evaluate(model: torch.nn.Module, loader, criterion, device: torch.device, amp: bool, *, include_probabilities: bool = False) -> dict[str, Any]:
+def evaluate(
+    model: torch.nn.Module, loader, criterion, device: torch.device, amp: bool, *, include_probabilities: bool = False
+) -> dict[str, Any]:
     """Run the model on a loader (Validation only in Stage 1) and compute all task metrics."""
     model.eval()
     total, n_items = 0.0, 0

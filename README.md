@@ -9,6 +9,10 @@ into a DataLoader, never used for training, tuning, checkpoint selection, backbo
 Out of scope in Stage 1: domain adaptation, external datasets, cross-attention/gated fusion, detection, segmentation,
 report generation, LLMs, deployment.
 
+## Stage 2 supervised transfer benchmark
+
+The Stage 2 feature branch adds sequential and joint supervised source training, matched VinDr baselines and validation-only initialization selection. Start with the [Stage 2 protocol and commands](docs/stage2.md), [Colab notebook](notebooks/Sanvia_Stage2_Domain_Adaptation.ipynb) and [verification ledger](docs/stage2_implementation_status.md).
+
 ## Quick start (Google Colab)
 
 1. Put this repository on Google Drive (for example `MyDrive/SANVIA`) or clone it, then `git init`/commit if needed
