@@ -47,7 +47,7 @@ def _manifest_row(stem: str, path: Path, images_dir: Path, previous: dict | None
         "header_error": None,
     }
     prev = previous.get(rel) if previous else None
-    if prev and prev["file_size"] == stat.st_size and prev["mtime_ns"] == stat.st_mtime_ns:
+    if prev and pd.isna(prev.get("header_error")) and prev["file_size"] == stat.st_size and prev["mtime_ns"] == stat.st_mtime_ns:
         row.update({k: prev[k] for k in ("sha256", "width", "height", "bit_depth", "color_type")})
         return row
     row["sha256"] = sha256_file(path)
@@ -75,7 +75,10 @@ def build_png_manifest(index: ImageIndex, workers: int = 8, previous: pd.DataFra
 def manifest_checksum(manifest: pd.DataFrame, columns: list[str] | None = None) -> str:
     """Order-independent checksum of a manifest DataFrame (volatile mtime is excluded)."""
     cols = columns or [c for c in manifest.columns if c != "mtime_ns"]
-    canonical = manifest[cols].astype(str).sort_values(cols).to_csv(index=False)
+    # Match Stage 1's persisted CSV interpretation of missing header values.
+    # Stringifying first encodes in-memory None differently from CSV NaN.
+    values = manifest[cols].astype(object).where(manifest[cols].notna(), "nan")
+    canonical = values.astype(str).sort_values(cols).to_csv(index=False)
     return sha256_text(canonical)
 
 
