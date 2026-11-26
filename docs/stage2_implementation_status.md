@@ -35,3 +35,9 @@ Ran `pytest -q tests/test_pipeline.py tests/stage2/test_stage1_artifacts.py` wit
 Inspected the official TCIA mass and calcification case-description headers and revised CMMD workbook header. CBIS uses two spellings for density. CMMD exposes patient and side without an exam identifier in the clinical workbook. Read exam identity from DICOM and block ambiguous cross-examination matches. INbreast binds CSV file numbers to authorized DICOMs. FM and DM require independently supplied release-specific bindings. These last three bindings still need validation on the owner's distributions. BCDR's official endpoint returned HTTP 403 in this environment.
 
 Ran `pytest -q tests/stage2/test_source_audit.py`. 3 passed. Native-format fixtures exercise primary joins, mixed pathology, non-exhaustive findings, native BI-RADS, duplicate gating, grouped splits, DICOM presentation, high-bit-depth input and cache invalidation.
+
+### Milestone 3 verification
+
+The shared source engine plans fixed warm-up and trainable updates per dataset. The joint schedule shuffles a quota-constrained sequence. Sequential transitions restore their best validation checkpoint and create a new optimizer. Persisted draw offsets, RNG state and named best snapshots support completed-update recovery. Invalid views bypass the encoder and inactive heads receive no gradient. Positive-only finding labels contribute masked BCE and positive recall. They do not enter the validation selection score.
+
+Ran `pytest -q tests/stage2/test_source_training.py`. 3 passed. Both interrupted strategies produced bit-identical final tensors to their respective uninterrupted CPU runs. Backbone factory, strict export and full downstream path still require the integration checks below.
