@@ -45,4 +45,3 @@ INbreast:
     mapping: {'1': '1','2': '2','3': '3','4': '4'}
     loss: ce
     weight: 1.0
-

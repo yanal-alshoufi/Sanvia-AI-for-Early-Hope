@@ -8,7 +8,7 @@ Base commit `050eae24f2d4ee5be9d9f9f3f929e3fa672f6a3a` on `origin/master`. Devel
 | 2. Sources and audit | Read documented source schemas, distinguish image types and grouping levels, retain raw labels, gate ambiguous records, persist deterministic patient splits and detect duplicates across sources and target. Verify missing/partial labels, DICOM polarity, resizing and corrupt files on fixtures. | Implemented and fixture-tested. Authorized release audits pending. |
 | 3. Supervised source experiments | Encode valid views through the Stage 1 factory, route task heads, verify masked losses and frozen buffers, match per-source update budgets, verify both strategies and interrupted-run recovery. | Implemented. Both strategies passed CPU interruption recovery. |
 | 4. Controlled target benchmark | Restore exact target architecture, transforms, losses and split. Transfer only verified backbone weights. Run and compare paired baselines for each seed, test validation-only metrics, selection and handoff reload. | Implemented. Six-arm smoke and portable reload passed. |
-| 5. Operations and delivery | Exercise CLI and notebook, separate modes and tracking, validate reports, run all existing and new tests, scan changes for secrets, document real-data acceptance. | CLI, tracking and DVC verified. Final notebook regression in progress. |
+| 5. Operations and delivery | Exercise CLI and notebook, separate modes and tracking, validate reports, run all existing and new tests, scan changes for secrets, document real-data acceptance. | Verified locally, including notebook execution, tracking readback and CLI re-entry. Hosted Colab and real-data acceptance remain open. |
 
 ## Inspection and decisions
 
@@ -60,6 +60,22 @@ The first Stage 1 suite run had 85 passes and one DVC failure. The environment m
 ## Implementation inventory
 
 The isolated `src/sanvia/stage2/` package contains the Stage 1 reader, source adapters, audit, preprocessing, datasets, source model and training engine, controlled target training, comparison, export, tracking, preflight, synthetic fixture generator, orchestration and CLI. `configs/stage2/` holds the default protocol and task registries. The new notebook and tests use those same entry points. Packaging adds a CLI and optional source-format dependencies. Stage 1 changes are limited to restoring the manifest regression check, its null serialization and cache handling, and opt-in probability output in its evaluator.
+
+### Final local acceptance
+
+Implementation revision `a8a03881f280badd4d447483938942d27548e6b7` is on the GitHub feature branch. The branch was created from `050eae2`. Real-data acceptance is outstanding.
+
+| Check actually executed | Result |
+|---|---|
+| Notebook preflight, `python -m pytest -q tests`, with CPU PyTorch and writable DVC cache | 103 passed, zero failures or skips. Four third-party deprecation warnings. |
+| `nbformat.validate` and `NotebookClient.execute` on the complete Stage 2 notebook in a local Jupyter kernel | All 26 code cells executed with zero cell errors. |
+| `sanvia-stage2 smoke-test --output <same-private-root>` after notebook execution | Reused the same benchmark identity. All 14 last-checkpoint timestamps were unchanged. |
+| Independent `load_export` calls and target-lineage digest checks | All four adapted source backbones reloaded. Six target summaries present. Smoke-mode research handoff absent and official test usage false. |
+| Local MLflow `research_candidate` alias lookup | Registered synthetic fixture candidate reloaded by alias metadata and its recorded export digest matched the independent file hash. |
+| `python -m compileall -q src tests scripts`, `ruff check src tests scripts`, `ruff format --check src tests scripts` | Passed. |
+| Changed-file inventory, YAML parsing, notebook JSON validation, import and credential-pattern checks | Passed for the 33 changed paths. No datasets, checkpoints, prediction records or credentials were included in the branch. |
+
+The final fixture suite checks that accumulated weighted gradients equal a single effective batch under uneven masks. It also checks separate film/digital release bindings, high-bit-depth TIFF input, derivative exclusion, incorrect laterality and missing native columns. The runtime versions used for the local notebook were Python 3.12.14, PyTorch 2.7.1 CPU, torchvision 0.22.1 CPU, pydicom 3.0.2, MLflow 3.18.0 and DVC 3.67.1.
 
 ## Next real-data acceptance steps
 
