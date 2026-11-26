@@ -41,3 +41,9 @@ Ran `pytest -q tests/stage2/test_source_audit.py`. 3 passed. Native-format fixtu
 The shared source engine plans fixed warm-up and trainable updates per dataset. The joint schedule shuffles a quota-constrained sequence. Sequential transitions restore their best validation checkpoint and create a new optimizer. Persisted draw offsets, RNG state and named best snapshots support completed-update recovery. Invalid views bypass the encoder and inactive heads receive no gradient. Positive-only finding labels contribute masked BCE and positive recall. They do not enter the validation selection score.
 
 Ran `pytest -q tests/stage2/test_source_training.py`. 3 passed. Both interrupted strategies produced bit-identical final tensors to their respective uninterrupted CPU runs. Backbone factory, strict export and full downstream path still require the integration checks below.
+
+### Milestone 4 component verification
+
+Stage 2 reuses the Stage 1 target model, augmentations, DataLoaders, two-phase Trainer and metric code. The evaluator can optionally include per-class probability columns. Its default output is unchanged. Source and baseline arms initialize target heads with the same seed and load only verified backbone tensors. Predefine per-task guardrails, validate sample alignment and resample whole studies. Export the pre-target artifact from the representative seed closest to its strategy mean.
+
+Ran `pytest -q tests/stage2/test_target.py`. 3 passed. Verified Stage 1 layout import, incompatible historical baseline provenance, factory reload, checksum rejection and paired study resampling. End-to-end target training and selection are checked in the final milestone.

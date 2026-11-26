@@ -23,7 +23,7 @@ def autocast_context(device: torch.device, amp: bool):
 
 
 @torch.no_grad()
-def evaluate(model: torch.nn.Module, loader, criterion, device: torch.device, amp: bool) -> dict[str, Any]:
+def evaluate(model: torch.nn.Module, loader, criterion, device: torch.device, amp: bool, *, include_probabilities: bool = False) -> dict[str, Any]:
     """Run the model on a loader (Validation only in Stage 1) and compute all task metrics."""
     model.eval()
     total, n_items = 0.0, 0
@@ -62,6 +62,10 @@ def evaluate(model: torch.nn.Module, loader, criterion, device: torch.device, am
         pred_df[f"{t}_true"] = np.concatenate(store[t]["true"])
         pred_df[f"{t}_pred"] = np.concatenate(store[t]["pred"])
         pred_df[f"{t}_valid"] = mask
+        if include_probabilities:
+            probabilities = np.concatenate(store[t]["prob"])
+            for class_index in range(k):
+                pred_df[f"{t}_prob_{class_index}"] = probabilities[:, class_index]
     result["selection_score"] = selection_score(result["birads"]["macro_f1"], result["density"]["macro_f1"])
     result["predictions"] = pred_df
     return result
