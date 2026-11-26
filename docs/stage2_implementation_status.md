@@ -29,3 +29,9 @@ Branch, base and source inventory verified. Pending checks are listed above.
 Original master reproduced the failing checksum assertion. CSV round trips convert empty header errors from None to NaN. Canonicalizing missing cells to the historical disk spelling preserves persisted Stage 1 fingerprints under this pandas version. Rehash previously unreadable entries when reusing the image index. Removed the notebook test exclusion. Historical records stay read-only. The reader verifies the saved split and sample hashes, training-only fits and eligible image bytes. Stage 1 summaries log the selected weight enum even on random-initialization runs, so use fresh matched ImageNet baselines for comparisons.
 
 Ran `pytest -q tests/test_pipeline.py tests/stage2/test_stage1_artifacts.py` with CPU PyTorch. 10 passed. The official-test protection test removed every synthetic test image before reading the snapshot. Private snapshot integration remains pending.
+
+### Milestone 2 verification
+
+Inspected the official TCIA mass and calcification case-description headers and revised CMMD workbook header. CBIS uses two spellings for density. CMMD exposes patient and side without an exam identifier in the clinical workbook. Read exam identity from DICOM and block ambiguous cross-examination matches. INbreast binds CSV file numbers to authorized DICOMs. FM and DM require independently supplied release-specific bindings. These last three bindings still need validation on the owner's distributions. BCDR's official endpoint returned HTTP 403 in this environment.
+
+Ran `pytest -q tests/stage2/test_source_audit.py`. 3 passed. Native-format fixtures exercise primary joins, mixed pathology, non-exhaustive findings, native BI-RADS, duplicate gating, grouped splits, DICOM presentation, high-bit-depth input and cache invalidation.

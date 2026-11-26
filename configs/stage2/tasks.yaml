@@ -1,0 +1,48 @@
+CBIS-DDSM:
+  pathology:
+    scope: image
+    field: pathology
+    classes: [benign, malignant]
+    mapping: {BENIGN: benign, BENIGN_WITHOUT_CALLBACK: benign, MALIGNANT: malignant}
+    loss: ce
+    weight: 1.0
+  density:
+    scope: image
+    field: density
+    classes: ['1','2','3','4']
+    mapping: {'1': '1','2': '2','3': '3','4': '4'}
+    exclude: ['0']
+    loss: ce
+    weight: 1.0
+  finding:
+    scope: image
+    field: finding
+    classes: [mass, calcification]
+    mapping: {mass: mass, calcification: calcification}
+    loss: bce
+    weight: 1.0
+    positive_only: true
+CMMD:
+  pathology:
+    scope: breast
+    field: pathology
+    classes: [benign, malignant]
+    mapping: {Benign: benign, Malignant: malignant}
+    loss: ce
+    weight: 1.0
+INbreast:
+  birads:
+    scope: image
+    field: birads
+    classes: ['0','1','2','3','4','4a','4b','4c','5','6']
+    mapping: {'0': '0','1': '1','2': '2','3': '3','4': '4','4a': '4a','4b': '4b','4c': '4c','4A': '4a','4B': '4b','4C': '4c','5': '5','6': '6'}
+    loss: ce
+    weight: 1.0
+  density:
+    scope: image
+    field: density
+    classes: ['1','2','3','4']
+    mapping: {'1': '1','2': '2','3': '3','4': '4'}
+    loss: ce
+    weight: 1.0
+

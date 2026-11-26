@@ -1,0 +1,66 @@
+mode: full
+name: primary
+stage1_output: /content/drive/MyDrive/VnDir_Mammo/sanvia_outputs
+vindr_images: /content/drive/MyDrive/VnDir_Mammo/images/images_png
+output: /content/drive/MyDrive/SANVIA_Stage2_Outputs
+enabled_sources: [CBIS-DDSM, CMMD, INbreast]
+strategies: [sequential, multi-dataset]
+seeds: [42, 123, 2026]
+pretrained: true
+pair_override: null
+reduced_sources: false
+split_seed: 42
+validation_fraction: 0.2
+cache: null
+sources:
+  CBIS-DDSM:
+    root: /content/drive/MyDrive/SANVIA_Datasets/CBIS-DDSM
+    version: null
+    annotations: []   # Each entry has path and official_split (train or test)
+    pathology_aggregation: unanimous
+  CMMD:
+    root: /content/drive/MyDrive/SANVIA_Datasets/CMMD
+    version: null
+    annotations: []   # Path to the TCIA clinical workbook
+  INbreast:
+    root: /content/drive/MyDrive/SANVIA_Datasets/INbreast
+    version: null
+    annotations: []   # Path to the authorized INbreast.csv
+  BCDR-FM:
+    root: /content/drive/MyDrive/SANVIA_Datasets/BCDR-FM
+    version: null
+    annotations: []
+  BCDR-DM:
+    root: /content/drive/MyDrive/SANVIA_Datasets/BCDR-DM
+    version: null
+    annotations: []
+source_training:
+  batch_size: 8
+  accumulation: 2
+  workers: 0
+  prefetch_factor: 2
+  pin_memory: true
+  warmup_updates: 8
+  train_updates: 64
+  quotas: {}
+  eval_every: 16
+  frozen_head_lr: 0.001
+  head_lr: 0.0001
+  backbone_lr: 0.00001
+  weight_decay: 0.0001
+  clip_norm: 1.0
+  amp: true
+  l2sp: 0.0
+  replay_fraction: 0.0
+  batch_by_backbone: {}
+selection:
+  min_gain: 0.005
+  max_task_regression: 0.01
+  max_qwk_regression: 0.05
+  max_minority_recall_regression: 0.05
+  max_overfit_gap: 0.30
+  bootstrap_iterations: 0
+  bootstrap_seed: 721
+mlflow: true
+dvc: false
+
