@@ -6,7 +6,7 @@ The Stage 2 feature branch adds sequential and joint supervised source training,
 
 1. Put this repository on Google Drive (for example `MyDrive/SANVIA`) or clone it, then `git init`/commit if needed
    (DVC and run metadata need a Git repository).
-2. Open `notebooks/Sanvia_Stage1_Backbone_Benchmark.ipynb`, select a GPU runtime, set `REPO_DIR` in the first cell, run all.
+2. Open `notebooks/Sanvia_Stage2_Backbone_Benchmark.ipynb`, select a GPU runtime, set `REPO_DIR` in the first cell, run all.
 3. Data is read from `/content/drive/MyDrive/VnDir_Mammo`; all persistent outputs go to
    `/content/drive/MyDrive/VnDir_Mammo/sanvia_outputs`.
 
