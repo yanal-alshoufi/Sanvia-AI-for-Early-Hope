@@ -1,15 +1,4 @@
-# SANVIA Stage 1: Multi-Task Mammography Backbone Benchmark
-
-Reproducible comparison of six ImageNet-pretrained torchvision backbones (ResNet50, DenseNet121, InceptionV3,
-MobileNetV3-Large, EfficientNet-B4, EfficientNetV2-S) on VinDr-Mammo PNG images. One sample is one breast
-(`study_id`, `laterality`) with its CC and MLO views; tasks are BI-RADS (5 classes) and breast density (4 classes).
-The two best backbones are selected using **Validation results only**. The official Test split is never loaded
-into a DataLoader, never used for training, tuning, checkpoint selection, backbone selection or registration.
-
-Out of scope in Stage 1: domain adaptation, external datasets, cross-attention/gated fusion, detection, segmentation,
-report generation, LLMs, deployment.
-
-## Stage 2 supervised transfer benchmark
+# SANVIA Stage 2: supervised transfer benchmark
 
 The Stage 2 feature branch adds sequential and joint supervised source training, matched VinDr baselines and validation-only initialization selection. Start with the [Stage 2 protocol and commands](docs/stage2.md), [Colab notebook](notebooks/Sanvia_Stage2_Domain_Adaptation.ipynb) and [verification ledger](docs/stage2_implementation_status.md).
 
